@@ -1,0 +1,6 @@
+*.uvguix.*
+STM32F042/
+*.scvd
+*.txt
+*.ini
+*.lst
