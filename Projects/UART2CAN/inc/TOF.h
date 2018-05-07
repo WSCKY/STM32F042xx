@@ -33,7 +33,13 @@
 #define TOF_USART_IRQHandler         USART1_IRQHandler
 
 /* Exported types ------------------------------------------------------------*/
+#if defined(__CC_ARM)
 __packed typedef struct
+#elif defined(__GNUC__)
+__attribute__((packed)) typedef struct
+#else
+typedef struct
+#endif
 {
 	uint8_t Header1;
 	uint8_t Header2;
