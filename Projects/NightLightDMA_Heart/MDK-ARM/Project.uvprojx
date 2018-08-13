@@ -455,6 +455,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\Libraries\STM32F0xx_StdPeriph_Driver\src\stm32f0xx_adc.c</FilePath>
             </File>
+            <File>
+              <FileName>stm32f0xx_pwr.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\Libraries\STM32F0xx_StdPeriph_Driver\src\stm32f0xx_pwr.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -529,6 +534,11 @@
               <FileName>CurveCtrl.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\App\CurveCtrl.c</FilePath>
+            </File>
+            <File>
+              <FileName>VoltCheck.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\App\VoltCheck.c</FilePath>
             </File>
           </Files>
         </Group>
