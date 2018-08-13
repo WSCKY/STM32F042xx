@@ -21,6 +21,7 @@
 
 #include "TouchPad.h"
 #include "CurveCtrl.h"
+#include "VoltCheck.h"
 
 #include "KeyUI.h"
 #include "WS2812B.h"

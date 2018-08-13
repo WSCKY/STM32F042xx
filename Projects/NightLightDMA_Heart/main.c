@@ -15,6 +15,7 @@
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
+static uint8_t _task_flag = 0;
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
 
@@ -48,14 +49,19 @@ int main(void)
 	LightModeInit();
 
 	for(;;) {
-		DelayTicks(1);
-		KeyCheckTask();
-		LightModeTask();
+		if(_task_flag == 1) {
+			_task_flag = 0;
+
+			KeyCheckTask();
+			LightModeTask();
+			VoltCheckTask();
+		}
   }
 }
 
 void SysTickIrqCallback(void)
 {
+	_task_flag = 1;
 	TouchPadCheckLoop();
 }
 
