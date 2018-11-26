@@ -17,6 +17,9 @@
 #include "Delay.h"
 #include "TimerCounter.h"
 
+#include "usbd_cdc_core.h"
+#include "usbd_usr.h"
+
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
 /* Exported macro ------------------------------------------------------------*/
