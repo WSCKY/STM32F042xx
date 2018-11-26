@@ -89,6 +89,16 @@ void PendSV_Handler(void)
 {
 }
 
+/**
+  * @brief  This function handles USB FS Handler.
+  * @param  None
+  * @retval None
+  */
+void USB_IRQHandler(void)
+{
+  USB_Istr();
+}
+
 /******************************************************************************/
 /*                 STM32F0xx Peripherals Interrupt Handlers                   */
 /*  Add here the Interrupt Handler for the used peripheral(s) (PPP), for the  */
