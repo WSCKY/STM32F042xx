@@ -51,6 +51,8 @@ static void SPI_Configuration(void)
 
   /* SPI configuration -------------------------------------------------------*/
   SPI_I2S_DeInit(_DW_SPI);
+  /* Initializes the SPI communication */
+  SPI_InitStructure.SPI_Mode = SPI_Mode_Master;
   SPI_InitStructure.SPI_Direction = SPI_Direction_2Lines_FullDuplex;
   SPI_InitStructure.SPI_DataSize = SPI_DATASIZE;
   SPI_InitStructure.SPI_CPOL = SPI_CPOL_Low;
@@ -60,4 +62,7 @@ static void SPI_Configuration(void)
   SPI_InitStructure.SPI_FirstBit = SPI_FirstBit_MSB;
   SPI_InitStructure.SPI_CRCPolynomial = 7;
   SPI_Init(_DW_SPI, &SPI_InitStructure);
+
+  /* Initialize the FIFO threshold */
+  SPI_RxFIFOThresholdConfig(_DW_SPI, SPI_RxFIFOThreshold_QF);
 }
