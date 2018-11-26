@@ -10,13 +10,13 @@
       <TargetName>STM32F042</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
-      <pCCUsed>5060750::V5.06 update 6 (build 750)::ARMCC</pCCUsed>
+      <pCCUsed>5060528::V5.06 update 5 (build 528)::ARMCC</pCCUsed>
       <uAC6>0</uAC6>
       <TargetOption>
         <TargetCommonOption>
           <Device>STM32F042G6</Device>
           <Vendor>STMicroelectronics</Vendor>
-          <PackID>Keil.STM32F0xx_DFP.2.0.0</PackID>
+          <PackID>Keil.STM32F0xx_DFP.1.5.0</PackID>
           <PackURL>http://www.keil.com/pack/</PackURL>
           <Cpu>IRAM(0x20000000,0x1800) IROM(0x08000000,0x8000) CPUTYPE("Cortex-M0") CLOCK(12000000) ELITTLE</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
@@ -134,11 +134,11 @@
             <RunIndependent>0</RunIndependent>
             <UpdateFlashBeforeDebugging>1</UpdateFlashBeforeDebugging>
             <Capability>1</Capability>
-            <DriverSelection>4107</DriverSelection>
+            <DriverSelection>4096</DriverSelection>
           </Flash1>
           <bUseTDR>1</bUseTDR>
           <Flash2>BIN\UL2CM3.DLL</Flash2>
-          <Flash3></Flash3>
+          <Flash3>"" ()</Flash3>
           <Flash4></Flash4>
           <pFcarmOut></pFcarmOut>
           <pFcarmGrp></pFcarmGrp>
@@ -184,7 +184,6 @@
             <hadXRAM>0</hadXRAM>
             <uocXRam>0</uocXRam>
             <RvdsVP>0</RvdsVP>
-            <RvdsMve>0</RvdsMve>
             <hadIRAM2>0</hadIRAM2>
             <hadIROM2>0</hadIROM2>
             <StupSel>8</StupSel>
@@ -324,8 +323,7 @@
             <wLevel>2</wLevel>
             <uThumb>0</uThumb>
             <uSurpInc>0</uSurpInc>
-            <uC99>0</uC99>
-            <uGnu>0</uGnu>
+            <uC99>1</uC99>
             <useXO>0</useXO>
             <v6Lang>1</v6Lang>
             <v6LangP>1</v6LangP>
@@ -423,11 +421,6 @@
               <FilePath>..\..\..\Libraries\STM32F0xx_StdPeriph_Driver\src\stm32f0xx_syscfg.c</FilePath>
             </File>
             <File>
-              <FileName>stm32f0xx_spi.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Libraries\STM32F0xx_StdPeriph_Driver\src\stm32f0xx_spi.c</FilePath>
-            </File>
-            <File>
               <FileName>stm32f0xx_usart.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\Libraries\STM32F0xx_StdPeriph_Driver\src\stm32f0xx_usart.c</FilePath>
@@ -448,16 +441,6 @@
               <FilePath>..\..\..\Libraries\STM32F0xx_StdPeriph_Driver\src\stm32f0xx_gpio.c</FilePath>
             </File>
             <File>
-              <FileName>stm32f0xx_can.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Libraries\STM32F0xx_StdPeriph_Driver\src\stm32f0xx_can.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f0xx_i2c.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Libraries\STM32F0xx_StdPeriph_Driver\src\stm32f0xx_i2c.c</FilePath>
-            </File>
-            <File>
               <FileName>stm32f0xx_misc.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\Libraries\STM32F0xx_StdPeriph_Driver\src\stm32f0xx_misc.c</FilePath>
@@ -473,39 +456,29 @@
           <GroupName>Driver</GroupName>
           <Files>
             <File>
-              <FileName>LED.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\LED.c</FilePath>
-            </File>
-            <File>
               <FileName>Delay.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\Delay.c</FilePath>
             </File>
             <File>
-              <FileName>TOF.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\TOF.c</FilePath>
-            </File>
-            <File>
-              <FileName>CAN.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\CAN.c</FilePath>
-            </File>
-            <File>
-              <FileName>HW_ID.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\HW_ID.c</FilePath>
-            </File>
-            <File>
-              <FileName>UltraSonic.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\UltraSonic.c</FilePath>
-            </File>
-            <File>
               <FileName>TimerCounter.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\TimerCounter.c</FilePath>
+            </File>
+            <File>
+              <FileName>PWR_CTRL.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\PWR_CTRL.c</FilePath>
+            </File>
+            <File>
+              <FileName>UserButton.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\UserButton.c</FilePath>
+            </File>
+            <File>
+              <FileName>WS2812B.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\WS2812B.c</FilePath>
             </File>
           </Files>
         </Group>
