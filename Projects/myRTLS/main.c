@@ -11,10 +11,14 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 
+#include "usbd_cdc_core.h"
+#include  "usbd_usr.h"
+
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
+USB_CORE_HANDLE  USB_Device_dev ;
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
 
@@ -32,6 +36,14 @@ int main(void)
        system_stm32f0xx.c file
      */
 	_TimeTicksInit();
+
+  /* The Application layer has only to call USBD_Init to 
+  initialize the USB low level driver, the USB device library, the USB clock 
+  ,pins and interrupt service routine (BSP) to start the Library*/
+  USBD_Init(&USB_Device_dev,
+            &USR_desc, 
+            &USBD_CDC_cb, 
+            &USR_cb);
 
 	LED_Init();
 	Delay_Init();
