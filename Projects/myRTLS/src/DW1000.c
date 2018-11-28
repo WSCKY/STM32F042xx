@@ -22,12 +22,12 @@ int DW1000_SPI_Read(uint16_t headerLength, const uint8_t *headerBuffer, uint32_t
   _DW_SPI_NSS_ENABLE();
   for(i = 0; i < headerLength; i ++) {
     _DW_SPI->DR = headerBuffer[i];
-    while((_DW_SPI->SR & SPI_I2S_FLAG_RXNE) == (uint16_t)RESET);
+    while((_DW_SPI->SR & SPI_I2S_FLAG_RXNE) == (uint16_t)RESET) {}
     readBuffer[0] = _DW_SPI->DR ; // Dummy read as we write the header
   }
   for(i=0; i<readlength; i++) {
     _DW_SPI->DR = 0;  // Dummy write as we read the message body
-    while((_DW_SPI->SR & SPI_I2S_FLAG_RXNE) == (uint16_t)RESET);
+    while((_DW_SPI->SR & SPI_I2S_FLAG_RXNE) == (uint16_t)RESET) {}
     readBuffer[i] = _DW_SPI->DR ; //this clears RXNE bit
   }
   _DW_SPI_NSS_DISABLE();
@@ -40,12 +40,12 @@ int DW1000_SPI_Write(uint16_t headerLength, const uint8_t *headerBuffer, uint32_
   _DW_SPI_NSS_ENABLE();
   for(i = 0; i < headerLength; i ++) {
     _DW_SPI->DR = headerBuffer[i];
-    while((_DW_SPI->SR & SPI_I2S_FLAG_RXNE) == (uint16_t)RESET);
+    while((_DW_SPI->SR & SPI_I2S_FLAG_RXNE) == (uint16_t)RESET) {}
     _DW_SPI->DR;
   }
   for( i = 0; i < bodyLength; i ++) {
     _DW_SPI->DR = bodyBuffer[i];
-    while((_DW_SPI->SR & SPI_I2S_FLAG_RXNE) == (uint16_t)RESET);
+    while((_DW_SPI->SR & SPI_I2S_FLAG_RXNE) == (uint16_t)RESET) {}
     _DW_SPI->DR ;
 	}
   _DW_SPI_NSS_DISABLE();
