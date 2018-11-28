@@ -22,6 +22,16 @@
 #include "usbd_cdc_core.h"
 #include "usbd_usr.h"
 
+#include "port_platform.h"
+#include "deca_types.h"
+#include "deca_param_types.h"
+#include "deca_regs.h"
+#include "deca_device_api.h"
+
+#include "TagMain.h"
+#include "AncMain.h"
+#include "RTLS_Conf.h"
+
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
 /* Exported macro ------------------------------------------------------------*/

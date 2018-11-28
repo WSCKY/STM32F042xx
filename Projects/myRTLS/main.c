@@ -15,7 +15,20 @@
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
-USB_CORE_HANDLE  USB_Device_dev ;
+USB_CORE_HANDLE  USB_Device_dev;
+
+static dwt_config_t config = {
+    5,                /* Channel number. */
+    DWT_PRF_64M,      /* Pulse repetition frequency. */
+    DWT_PLEN_128,     /* Preamble length. Used in TX only. */
+    DWT_PAC8,         /* Preamble acquisition chunk size. Used in RX only. */
+    10,               /* TX preamble code. Used in TX only. */
+    10,               /* RX preamble code. Used in RX only. */
+    0,                /* 0 to use standard SFD, 1 to use non-standard SFD. */
+    DWT_BR_6M8,       /* Data rate. */
+    DWT_PHRMODE_STD,  /* PHY header mode. */
+    (129 + 8 - 8)     /* SFD timeout (preamble length + 1 + SFD length - PAC size). Used in RX only. */
+};
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
 
@@ -46,15 +59,58 @@ int main(void)
 	Delay_Init();
   DW1000_If_Init();
 
-	for(;;) {
-    LED_TOG();
-    DelayTicks(200);
+  //-------------dw1000  ini------------------------------------	
+
+  /* Setup DW1000 IRQ pin */  
+  DW1000RSTn_NOP_IN();
+
+  /* Reset DW1000 */
+  reset_DW1000();
+
+  /* Set SPI clock to 3MHz */
+  port_set_dw1000_slowrate();
+  
+  /* Init the DW1000 */
+  if (dwt_initialise(DWT_LOADUCODE) == DWT_ERROR)
+  {
+    //Init of DW1000 Failed
+    while (1) {};
   }
+
+  // Set SPI to 8MHz clock
+  port_set_dw1000_fastrate();
+
+  /* Configure DW1000. */
+  dwt_configure(&config);
+
+  /* Apply default antenna delay value. See NOTE 2 below. */
+  dwt_setrxantennadelay(RX_ANT_DLY);
+  dwt_settxantennadelay(TX_ANT_DLY);
+
+  /* Set preamble timeout for expected frames. See NOTE 3 below. */
+  //dwt_setpreambledetecttimeout(0); // PRE_TIMEOUT
+
+  //-------------dw1000  ini------end---------------------------
+  // IF WE GET HERE THEN THE LEDS WILL BLINK
+
+//	for(;;) {
+//    LED_TOG();
+//    DelayTicks(200);
+//  }
+tag_rtls_task_function(0);
+while(1);
 }
 
+uint32_t tim_1s_cnt = 0;
 void SysTickIrqCallback(void)
 {
-
+  if(tim_1s_cnt < 1000)
+    tim_1s_cnt ++;
+  else {
+    tim_1s_cnt = 0;
+    FrameRateCountCallback(1);
+    LED_TOG();
+  }
 }
 
 #ifdef  USE_FULL_ASSERT
