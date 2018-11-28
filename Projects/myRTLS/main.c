@@ -44,6 +44,7 @@ int main(void)
 
 	LED_Init();
 	Delay_Init();
+  DW1000_If_Init();
 
 	for(;;) {
     LED_TOG();
