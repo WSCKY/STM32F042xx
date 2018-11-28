@@ -70,6 +70,7 @@
 #define INT_IN_TX_ADDRESS   (0x100)
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */
+uint8_t USBD_isEnabled(void);
 
 #endif /* __USB_CONF__H__ */
 

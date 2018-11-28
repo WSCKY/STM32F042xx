@@ -61,6 +61,8 @@ static uint16_t VCP_DataRx   (uint8_t* Buf, uint32_t Len);
 
 static uint16_t VCP_COMConfig(uint8_t Conf);
 
+static void BufferCopy(uint8_t *pSrc, uint8_t *pDst, uint32_t Length);
+
 CDC_IF_Prop_TypeDef VCP_fops = 
 {
   VCP_Init,
@@ -105,7 +107,8 @@ static uint16_t VCP_Init(void)
 
 //  /* Enable USART Interrupt */
 //  NVIC_InitStructure.NVIC_IRQChannel = EVAL_COM1_IRQn;
-//  NVIC_InitStructure.NVIC_IRQChannelPriority = USART_IT_PRIO;
+//  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
+//  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
 //  NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
 //  NVIC_Init(&NVIC_InitStructure);
   
@@ -116,7 +119,7 @@ static uint16_t VCP_Init(void)
   * @brief  VCP_DeInit
   *         DeInitializes the Media on the STM32
   * @param  None
-  * @retval Result of the opeartion (USBD_OK in all cases)
+  * @retval Result of the operation (USBD_OK in all cases)
   */
 static uint16_t VCP_DeInit(void)
 {
@@ -135,58 +138,58 @@ static uint16_t VCP_DeInit(void)
   */
 static uint16_t VCP_Ctrl (uint32_t Cmd, uint8_t* Buf, uint32_t Len)
 { 
-//  switch (Cmd)
-//  {
-//  case SEND_ENCAPSULATED_COMMAND:
-//    /* Not  needed for this driver */
-//    break;
+  switch (Cmd)
+  {
+  case SEND_ENCAPSULATED_COMMAND:
+    /* Not  needed for this driver */
+    break;
 
-//  case GET_ENCAPSULATED_RESPONSE:
-//    /* Not  needed for this driver */
-//    break;
+  case GET_ENCAPSULATED_RESPONSE:
+    /* Not  needed for this driver */
+    break;
 
-//  case SET_COMM_FEATURE:
-//    /* Not  needed for this driver */
-//    break;
+  case SET_COMM_FEATURE:
+    /* Not  needed for this driver */
+    break;
 
-//  case GET_COMM_FEATURE:
-//    /* Not  needed for this driver */
-//    break;
+  case GET_COMM_FEATURE:
+    /* Not  needed for this driver */
+    break;
 
-//  case CLEAR_COMM_FEATURE:
-//    /* Not  needed for this driver */
-//    break;
+  case CLEAR_COMM_FEATURE:
+    /* Not  needed for this driver */
+    break;
 
-//  case SET_LINE_CODING:
-//    linecoding.bitrate = (uint32_t)(Buf[0] | (Buf[1] << 8) | (Buf[2] << 16) | (Buf[3] << 24));
-//    linecoding.format = Buf[4];
-//    linecoding.paritytype = Buf[5];
-//    linecoding.datatype = Buf[6];
-//    /* Set the new configuration */
-//    VCP_COMConfig(OTHER_CONFIG);
-//    break;
+  case SET_LINE_CODING:
+    linecoding.bitrate = (uint32_t)(Buf[0] | (Buf[1] << 8) | (Buf[2] << 16) | (Buf[3] << 24));
+    linecoding.format = Buf[4];
+    linecoding.paritytype = Buf[5];
+    linecoding.datatype = Buf[6];
+    /* Set the new configuration */
+    VCP_COMConfig(OTHER_CONFIG);
+    break;
 
-//  case GET_LINE_CODING:
-//    Buf[0] = (uint8_t)(linecoding.bitrate);
-//    Buf[1] = (uint8_t)(linecoding.bitrate >> 8);
-//    Buf[2] = (uint8_t)(linecoding.bitrate >> 16);
-//    Buf[3] = (uint8_t)(linecoding.bitrate >> 24);
-//    Buf[4] = linecoding.format;
-//    Buf[5] = linecoding.paritytype;
-//    Buf[6] = linecoding.datatype; 
-//    break;
+  case GET_LINE_CODING:
+    Buf[0] = (uint8_t)(linecoding.bitrate);
+    Buf[1] = (uint8_t)(linecoding.bitrate >> 8);
+    Buf[2] = (uint8_t)(linecoding.bitrate >> 16);
+    Buf[3] = (uint8_t)(linecoding.bitrate >> 24);
+    Buf[4] = linecoding.format;
+    Buf[5] = linecoding.paritytype;
+    Buf[6] = linecoding.datatype; 
+    break;
 
-//  case SET_CONTROL_LINE_STATE:
-//    /* Not  needed for this driver */
-//    break;
+  case SET_CONTROL_LINE_STATE:
+    /* Not  needed for this driver */
+    break;
 
-//  case SEND_BREAK:
-//    /* Not  needed for this driver */
-//    break;    
-//    
-//  default:
-//    break;
-//  }
+  case SEND_BREAK:
+    /* Not  needed for this driver */
+    break;    
+    
+  default:
+    break;
+  }
 
   return USBD_OK;
 }
@@ -199,7 +202,7 @@ static uint16_t VCP_Ctrl (uint32_t Cmd, uint8_t* Buf, uint32_t Len)
   * @param  Len: Number of data to be sent (in bytes)
   * @retval Result of the operation: USBD_OK if all operations are OK else VCP_FAIL
   */
-static uint16_t VCP_DataTx (uint8_t* Buf, uint32_t Len)
+static uint16_t VCP_DataTx   (uint8_t* Buf, uint32_t Len)
 {
 //  if (linecoding.datatype == 7)
 //  {
@@ -209,15 +212,15 @@ static uint16_t VCP_DataTx (uint8_t* Buf, uint32_t Len)
 //  {
 //    APP_Rx_Buffer[APP_Rx_ptr_in] = USART_ReceiveData(EVAL_COM1);
 //  }
-//  
-//  APP_Rx_ptr_in++;
-//  
-//  /* To avoid buffer overflow */
-//  if(APP_Rx_ptr_in == APP_RX_DATA_SIZE)
-//  {
-//    APP_Rx_ptr_in = 0;
-//  }  
-//  
+  
+  APP_Rx_ptr_in++;
+  
+  /* To avoid buffer overflow */
+  if(APP_Rx_ptr_in == APP_RX_DATA_SIZE)
+  {
+    APP_Rx_ptr_in = 0;
+  }  
+  
   return USBD_OK;
 }
 
@@ -225,12 +228,14 @@ static uint16_t VCP_DataTx (uint8_t* Buf, uint32_t Len)
   * @brief  VCP_DataRx
   *         Data received over USB OUT endpoint are sent over CDC interface 
   *         through this function.
-  * @note   This function will block any OUT packet reception on USB endpoint 
-  *         untill exiting this function. If you exit this function before transfer
+  *           
+  *         @note
+  *         This function will block any OUT packet reception on USB endpoint 
+  *         until exiting this function. If you exit this function before transfer
   *         is complete on CDC interface (ie. using DMA controller) it will result 
   *         in receiving more data while previous ones are still not sent.
   *                 
-  * @param  Buf: Buffer of data to be received
+  * @param  Buf: Buffer of data received
   * @param  Len: Number of data received (in bytes)
   * @retval Result of the operation: USBD_OK if all operations are OK else VCP_FAIL
   */
@@ -243,7 +248,7 @@ static uint16_t VCP_DataRx (uint8_t* Buf, uint32_t Len)
 //    USART_SendData(EVAL_COM1, *(Buf + i) );
 //    while(USART_GetFlagStatus(EVAL_COM1, USART_FLAG_TXE) == RESET); 
 //  } 
-// 
+ 
   return USBD_OK;
 }
 
@@ -267,18 +272,6 @@ static uint16_t VCP_COMConfig(uint8_t Conf)
 //    - Hardware flow control disabled
 //    - Receive and transmit enabled
 //    */
-//    USART_InitStructure.USART_BaudRate = 115200;
-//    USART_InitStructure.USART_WordLength = USART_WordLength_8b;
-//    USART_InitStructure.USART_StopBits = USART_StopBits_1;
-//    USART_InitStructure.USART_Parity = USART_Parity_Odd;
-//    USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
-//    USART_InitStructure.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;
-//    
-//    /* Configure and enable the USART */
-//    STM_EVAL_COMInit(COM1, &USART_InitStructure);
-//    
-//    /* Enable the USART Receive interrupt */
-//    USART_ITConfig(EVAL_COM1, USART_IT_RXNE, ENABLE);
 //  }
 //  else
 //  {
@@ -298,7 +291,7 @@ static uint16_t VCP_COMConfig(uint8_t Conf)
 //      VCP_COMConfig(DEFAULT_CONFIG);
 //      return (USBD_FAIL);
 //    }
-//    
+
 //    /* set the parity bit*/
 //    switch (linecoding.paritytype)
 //    {
@@ -315,7 +308,7 @@ static uint16_t VCP_COMConfig(uint8_t Conf)
 //      VCP_COMConfig(DEFAULT_CONFIG);
 //      return (USBD_FAIL);
 //    }
-//    
+
 //    /*set the data type : only 8bits and 9bits is supported */
 //    switch (linecoding.datatype)
 //    {
@@ -332,41 +325,85 @@ static uint16_t VCP_COMConfig(uint8_t Conf)
 //      {
 //        USART_InitStructure.USART_WordLength = USART_WordLength_9b;
 //      }
-//      
+
 //      break;
 //    default :
 //      VCP_COMConfig(DEFAULT_CONFIG);
 //      return (USBD_FAIL);
 //    }
-//    
+
 //    USART_InitStructure.USART_BaudRate = linecoding.bitrate;
 //    USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
 //    USART_InitStructure.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;
-//    
+
 //    /* Configure and enable the USART */
 //    STM_EVAL_COMInit(COM1, &USART_InitStructure);
 //  }
   return USBD_OK;
 }
 
-/**
-  * @brief  EVAL_COM_IRQHandler
-  * @param  None.
-  * @retval None.
-  */
-//void EVAL_COM_IRQHandler(void)
-//{
-//  if (USART_GetITStatus(EVAL_COM1, USART_IT_RXNE) != RESET)
-//  {
-//    /* Send the received data to the PC Host*/
-//    VCP_DataTx (0,0);
-//  }
+uint16_t USB_CDC_SendChar(uint8_t c)
+{
+  if (linecoding.datatype == 7)
+  {
+    APP_Rx_Buffer[APP_Rx_ptr_in] = c & 0x7F;
+  }
+  else if (linecoding.datatype == 8)
+  {
+    APP_Rx_Buffer[APP_Rx_ptr_in] = c;
+  }
 
-//  /* If overrun condition occurs, clear the ORE flag and recover communication */
-//  if (USART_GetFlagStatus(EVAL_COM1, USART_FLAG_ORE) != RESET)
-//  {
-//    (void)USART_ReceiveData(EVAL_COM1);
-//  }
-//}
+  APP_Rx_ptr_in ++;
+  
+  /* To avoid buffer overflow */
+  if(APP_Rx_ptr_in == APP_RX_DATA_SIZE)
+  {
+    APP_Rx_ptr_in = 0;
+  }  
+
+  return USBD_OK;
+}
+
+void USB_CDC_SendCharFast(uint8_t c)
+{
+  APP_Rx_Buffer[APP_Rx_ptr_in ++] = c;
+  /* To avoid buffer overflow */
+  if(APP_Rx_ptr_in == APP_RX_DATA_SIZE)
+    APP_Rx_ptr_in = 0;
+}
+
+void USB_CDC_SendBuffer(uint8_t *pBuffer, uint8_t Length)
+{
+	while(Length --) {
+		USB_CDC_SendChar(*pBuffer ++);
+	}
+}
+
+void USB_CDC_SendBufferFast(uint8_t *pBuffer, uint8_t Length)
+{
+  do {
+    if(APP_Rx_ptr_in + Length <= APP_RX_DATA_SIZE) {
+      BufferCopy(pBuffer, APP_Rx_Buffer + APP_Rx_ptr_in, Length);
+      APP_Rx_ptr_in += Length;
+      Length = 0;
+    } else {
+      BufferCopy(pBuffer, APP_Rx_Buffer + APP_Rx_ptr_in, APP_RX_DATA_SIZE - APP_Rx_ptr_in);
+      Length = APP_RX_DATA_SIZE - APP_Rx_ptr_in;
+      APP_Rx_ptr_in = 0;
+    }
+  } while(Length);
+  /* To avoid buffer overflow */
+  if(APP_Rx_ptr_in == APP_RX_DATA_SIZE)
+    APP_Rx_ptr_in = 0;
+}
+
+static void BufferCopy(uint8_t *pSrc, uint8_t *pDst, uint32_t Length)
+{
+  while(Length --) {
+    *pDst = *pSrc;
+    pDst ++;
+    pSrc ++;
+  }
+}
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
