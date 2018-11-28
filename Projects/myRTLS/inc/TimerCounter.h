@@ -29,6 +29,12 @@ uint32_t _Get_Micros(void);
 uint32_t _Get_Millis(void);
 uint32_t _Get_Secnds(void);
 
+void _delay_us(uint32_t us);
+void _delay_ms(uint32_t ms);
+
+void _MeasureTimeStart(void);
+uint32_t _GetTimeMeasured(void);
+
 #endif /* __TIMERCOUNTER_H */
 
 /******************************** END OF FILE *********************************/
