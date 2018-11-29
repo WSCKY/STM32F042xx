@@ -39,7 +39,7 @@
 #define TAG_PROC_RESP_RX_DLY_UUS 400
 
 #define INSTANCE_MODE_TAG              (1)
-#define SUPPORT_MAX_ANCHORS            (3)
+#define SUPPORT_MAX_ANCHORS            (4)
 
 #if (INSTANCE_MODE_TAG)
 #define INST_TAG_ID                    (0 | TAG_ADDR_MASK)
