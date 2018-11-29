@@ -36,10 +36,7 @@
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
 /* Select D+ pullup: internal or external */
-//#ifdef USE_STM32072B_EVAL
- /* When using STM32072B_EVAL board the internal pullup must be enabled */
- #define INTERNAL_PULLUP
-//#endif
+#define INTERNAL_PULLUP
 
 /* Define if Low power mode is enabled; it allows entering the device into STOP mode
     following USB Suspend event, and wakes up after the USB wakeup event is received. */

@@ -45,17 +45,7 @@ typedef struct
 }LINE_CODING;
 
 /* Exported constants --------------------------------------------------------*/
-/* The following define is used to route the USART IRQ handler to be used.
-   The IRQ handler function is implemented in the usbd_cdc_vcp.c file. */
-          
-#define EVAL_COM_IRQHandler            USART2_IRQHandler
-#define USART_IT_PRIO                  0 
-#define USB_IT_PRIO                    1 /* USB priority should be lower than USART
-                                            in order to not loose data reception from
-                                            USART while USB interrupt is being handled*/
-
-#define DEFAULT_CONFIG                  0
-#define OTHER_CONFIG                    1
+#define USB_IT_PRIO                    1
 
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */

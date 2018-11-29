@@ -34,9 +34,21 @@ static uint64_t get_sys_timestamp_u64(void);
 
 static void rtls_init(void)
 {
+  dwt_setleds(DWT_LEDS_ENABLE);
+#if !(DATA_PRINT_MONITOR)
+  TxPacket.Packet.type = TYPE_DIST_GROUP_Resp;
+  TxPacket.Packet.len = sizeof(DistGroupDataRespDef) + 2;
+  TxPacket.Packet.PacketData.DistGroup.TagAddr = INST_TAG_ID;
+#endif /* !(DATA_PRINT_MONITOR) */
+
   _frameTX.Frame.stx = DEFAULT_STX;
   _frameTX.Frame.fType = poll_msg;
   _frameTX.Frame.SepNbr = frame_seq_nb;
+
+  /* Set expected response's delay and timeout. 
+   * As this example only handles one incoming frame with always the same delay and timeout, those values can be set here once for all. */
+  dwt_setrxaftertxdelay(POLL_TX_TO_RESP_RX_DLY_UUS);
+  dwt_setrxtimeout(65000); // Maximum value timeout with DW1000 is 65ms
 }
 
 /**
@@ -83,7 +95,6 @@ static void poll_send_loop(void)
       dwt_rxreset();
       /* Delay a task for a given number of ticks */
       _delay_ms(5);
-//      vTaskDelay(5);
     }
   }
 }
@@ -185,7 +196,6 @@ static void final_send(FrameDataUnion *pFrameTX)
   }
   /* wait for anchor process. */
   _delay_ms(2);
-//  vTaskDelay(2);
 }
 
 static void tag_rtls_run(void)
@@ -276,21 +286,9 @@ static uint64_t get_sys_timestamp_u64(void)
 void tag_rtls_task_function(void * pvParameter)
 {
   UNUSED_PARAMETER(pvParameter);
-  dwt_setleds(DWT_LEDS_ENABLE);
-#if !(DATA_PRINT_MONITOR)
-  TxPacket.Packet.type = TYPE_DIST_GROUP_Resp;
-  TxPacket.Packet.len = sizeof(DistGroupDataRespDef) + 2;
-  TxPacket.Packet.PacketData.DistGroup.TagAddr = INST_TAG_ID;
-#endif /* !(DATA_PRINT_MONITOR) */
   rtls_init();
-  /* Set expected response's delay and timeout. 
-   * As this example only handles one incoming frame with always the same delay and timeout, those values can be set here once for all. */
-  dwt_setrxaftertxdelay(POLL_TX_TO_RESP_RX_DLY_UUS);
-  dwt_setrxtimeout(65000); // Maximum value timeout with DW1000 is 65ms  
-
   /* Loop forever initiating ranging exchanges. */
-  while (true)
-  {
+  while (true) {
     tag_rtls_run();
 #if (DATA_PRINT_MONITOR)
     for(uint8_t i = 0; i < resp_recv_cnt; i ++) {
