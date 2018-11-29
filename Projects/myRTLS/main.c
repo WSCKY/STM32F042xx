@@ -59,22 +59,22 @@ int main(void)
 	Delay_Init();
   DW1000_If_Init();
 
-  //-------------dw1000  ini------------------------------------	
-
+  /*
+   * DW1000 Initialize.
+   */
   /* Setup DW1000 IRQ pin */  
   DW1000RSTn_NOP_IN();
-
   /* Reset DW1000 */
   reset_DW1000();
-
   /* Set SPI clock to 3MHz */
   port_set_dw1000_slowrate();
-  
   /* Init the DW1000 */
-  if (dwt_initialise(DWT_LOADUCODE) == DWT_ERROR)
-  {
+  if (dwt_initialise(DWT_LOADUCODE) == DWT_ERROR) {
     //Init of DW1000 Failed
-    while (1) {};
+    while (1) {
+      LED_TOG();
+      DelayTicks(50);
+    };
   }
 
   // Set SPI to 8MHz clock
@@ -92,13 +92,11 @@ int main(void)
 
   //-------------dw1000  ini------end---------------------------
   // IF WE GET HERE THEN THE LEDS WILL BLINK
-
-//	for(;;) {
-//    LED_TOG();
-//    DelayTicks(200);
-//  }
-tag_rtls_task_function(0);
-while(1);
+  tag_rtls_task_function(0);
+  while(1) {
+    LED_TOG();
+    DelayTicks(50);
+  }
 }
 
 uint32_t tim_1s_cnt = 0;
