@@ -4,6 +4,7 @@ static _DW1000_IRQnCallback pIRQnCallback = 0;
 
 static void SPI_Configuration(void);
 static void GPIO_Configuration(void);
+static uint8_t STM_SPI_WriteRead(uint8_t Data);
 
 /**
   * @brief  Initialize Driver for DW1000.
@@ -21,14 +22,10 @@ int DW1000_SPI_Read(uint16_t headerLength, const uint8_t *headerBuffer, uint32_t
   uint32_t i = 0;
   _DW_SPI_NSS_ENABLE();
   for(i = 0; i < headerLength; i ++) {
-    _DW_SPI->DR = headerBuffer[i];
-    while((_DW_SPI->SR & SPI_I2S_FLAG_RXNE) == (uint16_t)RESET) {}
-    readBuffer[0] = _DW_SPI->DR ; // Dummy read as we write the header
+    STM_SPI_WriteRead(headerBuffer[i]);
   }
   for(i=0; i<readlength; i++) {
-    _DW_SPI->DR = 0;  // Dummy write as we read the message body
-    while((_DW_SPI->SR & SPI_I2S_FLAG_RXNE) == (uint16_t)RESET) {}
-    readBuffer[i] = _DW_SPI->DR ; //this clears RXNE bit
+    readBuffer[i] = STM_SPI_WriteRead(0);
   }
   _DW_SPI_NSS_DISABLE();
   return 0;
@@ -39,14 +36,10 @@ int DW1000_SPI_Write(uint16_t headerLength, const uint8_t *headerBuffer, uint32_
   uint32_t i = 0;
   _DW_SPI_NSS_ENABLE();
   for(i = 0; i < headerLength; i ++) {
-    _DW_SPI->DR = headerBuffer[i];
-    while((_DW_SPI->SR & SPI_I2S_FLAG_RXNE) == (uint16_t)RESET) {}
-    _DW_SPI->DR;
+    STM_SPI_WriteRead(headerBuffer[i]);
   }
   for( i = 0; i < bodyLength; i ++) {
-    _DW_SPI->DR = bodyBuffer[i];
-    while((_DW_SPI->SR & SPI_I2S_FLAG_RXNE) == (uint16_t)RESET) {}
-    _DW_SPI->DR ;
+    STM_SPI_WriteRead(bodyBuffer[i]);
 	}
   _DW_SPI_NSS_DISABLE();
   return 0;
@@ -97,6 +90,35 @@ void DW1000_SetIRQnHandler(_DW1000_IRQnCallback pf)
 {
   if(pf != 0)
     pIRQnCallback = pf;
+}
+
+/**
+  * @brief  Sends a byte through the SPI interface and return the byte received 
+  *         from the SPI bus.
+  * @param  Data: byte send.
+  * @retval The received byte value
+  * @retval None
+  */
+static uint8_t STM_SPI_WriteRead(uint8_t Data)
+{
+  uint8_t tmp = 0x00;
+  
+  /* Wait until the transmit buffer is empty */ 
+  while(SPI_I2S_GetFlagStatus(_DW_SPI, SPI_I2S_FLAG_TXE) != SET)
+  {
+  }  
+  /* Send the byte */
+  SPI_SendData8(_DW_SPI, Data);
+  
+  /* Wait to receive a byte */ 
+  while(SPI_I2S_GetFlagStatus(_DW_SPI, SPI_I2S_FLAG_RXNE) != SET)
+  {
+  }
+  /* Return the byte read from the SPI bus */    
+  tmp = SPI_ReceiveData8(_DW_SPI);
+
+  /* Return read Data */
+  return tmp;
 }
 
 /**
