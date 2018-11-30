@@ -527,6 +527,11 @@
               <FileType>1</FileType>
               <FilePath>..\src\DW1000.c</FilePath>
             </File>
+            <File>
+              <FileName>TaskTimer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\TaskTimer.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
