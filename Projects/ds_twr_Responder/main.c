@@ -91,12 +91,18 @@ int main(void)
   //dwt_setpreambledetecttimeout(0); // PRE_TIMEOUT
 
   //-------------dw1000  ini------end---------------------------
+  TaskTimerInit(100);
   // IF WE GET HERE THEN THE LEDS WILL BLINK
   ds_responder_task_function(0);
   while(1) {
     LED_TOG();
     DelayTicks(50);
   }
+}
+
+void TaskTimerCallback(void)
+{
+  SendDataToMonitor();
 }
 
 uint32_t tim_1s_cnt = 0;
@@ -106,7 +112,6 @@ void SysTickIrqCallback(void)
     tim_1s_cnt ++;
   else {
     tim_1s_cnt = 0;
-//    FrameRateCountCallback(1);
     LED_TOG();
   }
 }

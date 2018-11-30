@@ -17,6 +17,8 @@
 #include "Delay.h"
 #include "TimerCounter.h"
 
+#include "TaskTimer.h"
+
 #include "DW1000.h"
 
 #include "usbd_cdc_core.h"

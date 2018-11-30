@@ -316,7 +316,6 @@ void ds_responder_task_function (void * pvParameter)
   while (true)
   {
     ds_resp_run();
-    SendDataToMonitor();
     /* Delay a task for a given number of ticks */
 //    vTaskDelay(RNG_DELAY_MS);
 //    /* Tasks must be implemented to never return... */
